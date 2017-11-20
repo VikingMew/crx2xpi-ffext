@@ -175,7 +175,8 @@ def queue():
         q = Queue().select(id=id)
         if not q: return jsonify(error='Invalid id.')
         if 'artifact' in request.args:
-            art_dir = q.get('artifact_dir')
+            art_dir = q[0].get('artifact_dir')
+            if not os.path.exists(art_dir): return jsonify(error='Artifacts not generarted.')
             xpis = [_ for _ in os.listdir(art_dir) if _.endswith('.xpi')]
             if len(xpis) == 0: return jsonify(error='XPI not found.')
             path = art_dir + '/' + xpis[0]

@@ -10,3 +10,17 @@ Quite often, migrating to Firefox involves much more than the JSON work. You sho
 - Install node.js on the server, and then `npm install --global web-ext`.
 - Flask and sqlite3 are required to run the web server.
 - Run `app.py dequeue` alongside with `app.py` so as to handle the queue, and run `app.py clear` once every four hours to wipe out-dated files.
+
+
+## Usage
+
+- POST `/queue` with a file field called `file`:
+	-- a `.json` file, to get processed `manifest.json`.
+	-- a `.zip` or `.crx` file, to try automatically fetch signed XPI.
+	Returns: `id`.
+
+- GET `/queue?id=<id>`: check queue status and result.
+
+- GET `/queue?id=<id>&artifact`: get XPI file if the process was successful. Files will get deleted in 4 hours after generation.
+
+All of above will return a JSON `{"error": "<error message>"}` when errors are encountered.
